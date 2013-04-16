@@ -1,0 +1,18 @@
+#!/bin/bash
+# EPIQA.procsummary
+
+EPIQAdir='/home/sapje1/QA/EPI'
+QAdir='/home/sapje1/QA'
+
+PATH=$PATH:/cubric/software/bin
+
+FSLOUTPUTTYPE=NIFTI_GZ
+export FSLOUTPUTTYPE
+export FSLDIR=/cubric/software/freesurfer/fsl
+
+pushd ${EPIQAdir}
+
+/opt/matlab/bin/matlab -nojvm -nosplash -r EPIQA_autosummary,quit
+
+popd
+

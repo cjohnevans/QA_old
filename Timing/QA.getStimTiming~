@@ -1,0 +1,19 @@
+#!/bin/bash
+
+QAdir='/home/sapje1/QA/Timing'
+PATH=$PATH:/cubric/software/bin
+
+FSLOUTPUTTYPE=NIFTI_GZ
+export FSLOUTPUTTYPE
+export FSLDIR=/cubric/software/freesurfer/fsl
+
+pushd ${QAdir}
+
+rsync -ai ~sapcv3/ScannerTiming/* /home/sapje1/QA/Timing/TimingFiles/ > /home/sapje1/QA/Timing/TimingFiles/tfrlog.txt
+#rsync -av ~sapcv3/ScannerTiming/* /home/sapje1/QA/Timing/TimingFiles/
+
+cat /home/sapje1/QA/Timing/TimingFiles/tfrlog.txt | grep 'Exp_fMRI' | awk '{print $2}' > /home/sapje1/QA/Timing/TimingFiles/fname.txt
+
+/opt/matlab/bin/matlab -nojvm -nosplash -r StimTiming,quit
+
+popd

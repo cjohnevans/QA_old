@@ -1,0 +1,28 @@
+#!/bin/bash
+# EPIQA.procyesterday: find EPIQA yesterday and process
+
+EPIQAdir='/home/sapje1/QA/EPI'
+QAdir='/home/sapje1/QA'
+
+PATH=$PATH:/cubric/software/bin
+
+FSLOUTPUTTYPE=NIFTI_GZ
+export FSLOUTPUTTYPE
+export FSLDIR=/cubric/software/freesurfer/fsl
+
+pushd ${EPIQAdir}
+
+dateyr=`date -d '1 day ago'  "+%Y"`
+dateyrmo=`date -d '1 day ago'  "+%Y-%m-"`
+yesterday=`date -d '1 day ago' "+%d"`
+
+fullpath=`echo /cubric/mri/direct_transfer/${dateyr}/${dateyrmo}${yesterday}*`
+
+find ${fullpath} -exec /home/sapje1/Code/Scripts/tarball.scaninfoshort {} \; > ${EPIQAdir}/yestscanlist.txt
+
+cat ${EPIQAdir}/yestscanlist.txt | grep -i 'dailyqa\|dqa' | awk -F, '{print $2 " " $1}' > EPIQA_autolist.txt
+
+/opt/matlab/bin/matlab -nojvm -nosplash -r EPIQA_autorun,quit
+
+popd
+

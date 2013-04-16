@@ -1,0 +1,19 @@
+#!/bin/bash
+# EPIQA.batchrun : take whatever is in ~/QA/EPI/EPIQA_autolist.txt and run EPIQA_autorun.m script on these
+#  i.e. use this for batch processing a number of EPIQA datasets
+
+EPIQAdir='/home/sapje1/QA/EPI'
+QAdir='/home/sapje1/QA'
+
+PATH=$PATH:/cubric/software/bin
+
+FSLOUTPUTTYPE=NIFTI_GZ
+export FSLOUTPUTTYPE
+export FSLDIR=/cubric/software/freesurfer/fsl
+
+pushd ${EPIQAdir}
+
+/opt/matlab/bin/matlab -nojvm -nosplash -r EPIQA_autorun,quit
+
+popd
+
